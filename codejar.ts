@@ -174,7 +174,6 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
 
     visit(editor, el => {
       if (el.nodeType !== Node.TEXT_NODE) return
-
       const len = (el.nodeValue || "").length
       if (current + len >= pos.start) {
         if (!startNode) {
@@ -189,6 +188,9 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
       }
       current += len
     })
+    if (startNode && startOffset === (startNode.nodeValue || '').length && (startNode.nodeValue || '').slice(-1) === "\n") {
+      startNode.nodeValue += "\n"
+    }
 
     // If everything deleted place cursor at editor
     if (!startNode) startNode = editor
@@ -198,7 +200,6 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
     if (pos.dir == "<-") {
       [startNode, startOffset, endNode, endOffset] = [endNode, endOffset, startNode, startOffset]
     }
-
     s.setBaseAndExtent(startNode, startOffset, endNode, endOffset)
   }
 
