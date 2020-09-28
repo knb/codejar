@@ -41,6 +41,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
   editor.style.overflowY = "auto"
   editor.style.resize = "vertical"
   editor.style.whiteSpace = "pre-wrap"
+  editor.addEventListener("compositionend", handleCompositionEnd)
 
   highlight(editor)
 
@@ -109,6 +110,12 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
     recordHistory()
     if (callback) callback(toString())
   })
+
+  function handleCompositionEnd(event: any): void {
+    if (callback && event.data !== "") {
+      callback(toString())
+    }
+  }
 
   function save(): Position {
     const s = window.getSelection()!
@@ -428,6 +435,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
       for (let [type, fn] of listeners) {
         editor.removeEventListener(type, fn)
       }
+      editor.removeEventListener("compositionend", handleCompositionEnd)
     },
   }
 }
