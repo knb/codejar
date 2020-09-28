@@ -71,6 +71,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
   }
 
   on("keydown", event => {
+    event.stopPropagation()
     if (event.defaultPrevented) return
 
     prev = toString()
@@ -85,6 +86,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
   })
 
   on("keyup", event => {
+    event.stopPropagation()
     if (event.defaultPrevented) return
     if (event.isComposing) return
 
