@@ -188,7 +188,8 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement) => void
       }
       current += len
     })
-    if (startNode && startOffset === (startNode.nodeValue || '').length && (startNode.nodeValue || '').slice(-1) === "\n") {
+    if (startNode === editor.lastChild && startOffset === (startNode.nodeValue || '').length && (startNode.nodeValue || '').slice(-1) === "\n") {
+      console.log('t: ', startNode)
       startNode.nodeValue += "\n"
     }
 
