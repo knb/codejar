@@ -2,3 +2,7 @@
 package-lock.json
 *.js
 *.d.ts
+.pnp.cjs
+.pnp.loader.mjs
+.yarn/
+yarn.lock

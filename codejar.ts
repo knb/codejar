@@ -132,6 +132,11 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement, pos?: P
     onUpdate(toString())
   })
 
+  on('compositionend', event => {
+    recordHistory()
+    onUpdate(toString())
+  })
+
   on('cut', event => {
     recordHistory()
     handleCut(event)
