@@ -47,7 +47,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement, pos?: P
   let at = -1
   let focus = false
   let onUpdate: (code: string) => void | undefined = () => void 0
-  let prev: string // code content prior keydown event
+  let prev: string | null // code content prior keydown event
 
   editor.setAttribute('contenteditable', 'plaintext-only')
   editor.setAttribute('spellcheck', options.spellcheck ? 'true' : 'false')
@@ -92,6 +92,8 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement, pos?: P
 
   on('keydown', event => {
     if (event.defaultPrevented) return
+    // if (event.isComposing) return
+    if (event.isComposing || event.key === 'Process' || event.keyCode === 229) return
 
     prev = toString()
     if (options.preserveIdent) handleNewLine(event)
@@ -110,11 +112,20 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement, pos?: P
 
   on('keyup', event => {
     if (event.defaultPrevented) return
-    if (event.isComposing) return
+    // if (event.isComposing) return
+    if (event.isComposing || event.key === 'Process' || event.keyCode === 229) return
+    if (prev === undefined || prev === null) return
 
-    if (prev !== toString()) debounceHighlight()
+    let code = toString()
+    if (prev.slice(-1) != "\n" && code.slice(-1) == "\n") {
+      editor.append("\n")
+    }
+    
+    if (prev !== code) debounceHighlight()
+    prev = null
     debounceRecordHistory(event)
     onUpdate(toString())
+    code = toString()
   })
 
   on('focus', _event => {
@@ -133,6 +144,7 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement, pos?: P
   })
 
   on('compositionend', event => {
+    // console.log(['jar-compositionend', event])
     recordHistory()
     onUpdate(toString())
   })
@@ -204,7 +216,6 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement, pos?: P
         if (pos.dir != '<-') pos.end += el.nodeValue!.length
       }
     })
-
     editor.normalize() // collapse empty text nodes
     return pos
   }

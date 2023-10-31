@@ -1,6 +1,7 @@
 {
   "name": "codejar",
   "description": "An embeddable code editor for the browser",
+  "private": true,
   "version": "4.2.0",
   "type": "module",
   "main": "./dist/codejar.js",

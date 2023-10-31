@@ -40,11 +40,15 @@
 </head>
 <body>
 <main>
-  <div class="editor" data-manual data-gramm="false"></div>
+  <div id="editor" class="editor" data-manual data-gramm="false"></div>
+  <hr />
+  <div class="editor">
+    <textarea id="story" name="story" rows="5" cols="33"></textarea>
+  </div>
 </main>
 <script type="module">
   import {CodeJar} from './dist/codejar.js'
-  const editor = document.querySelector('.editor')
+  const editor = document.querySelector('#editor')
 
   const highlight = editor => {
     editor.innerHTML = Prism.highlight(editor.textContent, Prism.languages.javascript, 'javascript')
