@@ -550,20 +550,18 @@ export function CodeJar(editor: HTMLElement, highlight: (e: HTMLElement, pos?: P
   }
 
   function getSelection() {
-    if (editor.parentNode?.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-      return (editor.parentNode as Document).getSelection()!
-    }
-    return window.getSelection()!
+    // @ts-ignore
+    return editor.getRootNode().getSelection() as Selection
   }
 
   return {
     updateOptions(newOptions: Partial<Options>) {
       Object.assign(options, newOptions)
     },
-    updateCode(code: string) {
+    updateCode(code: string, callOnUpdate: boolean = true) {
       editor.textContent = code
       doHighlight(editor)
-      onUpdate(code)
+      callOnUpdate && onUpdate(code)
     },
     onUpdate(callback: (code: string) => void) {
       onUpdate = callback
